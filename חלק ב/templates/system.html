@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field, flashes %}
+{% block title %}Customers · Comunication_LTD{% endblock %}
+{% block body_class %}page-app{% endblock %}
+{% block body %}
+<header class="bar">
+  <div class="strand-rule" aria-hidden="true"></div>
+  <div class="bar-inner">
+    <a class="wordmark" href="{{ url_for('system') }}">Comunication_LTD</a>
+    <nav class="bar-nav" aria-label="Account">
+      <span class="who">{{ user.username }}</span>
+      <a href="{{ url_for('change_password') }}">Change password</a>
+      <form method="post" action="{{ url_for('logout') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="link-btn" type="submit">Sign out</button>
+      </form>
+    </nav>
+  </div>
+</header>
+
+<main class="workspace">
+  <section class="intake" aria-labelledby="add-title">
+    <h1 id="add-title">Add a customer</h1>
+    {{ flashes() }}
+    <form method="post" novalidate>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      {{ field("name", "Full name", value=form.name, error=errors.name, maxlength=120) }}
+      {{ field("email", "Email", type="email", value=form.email, error=errors.email, required=False, maxlength=120) }}
+      {{ field("phone", "Phone", type="tel", value=form.phone, error=errors.phone, required=False, maxlength=40) }}
+      {{ field("address", "Address", value=form.address, error=errors.address, required=False, maxlength=255) }}
+      <button class="btn" type="submit">Add customer</button>
+    </form>
+  </section>
+
+  <section class="roster" aria-labelledby="list-title">
+    <h2 id="list-title">Customers <span class="count">{{ customers|length }}</span></h2>
+    {% if customers %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Phone</th><th scope="col">Address</th></tr>
+        </thead>
+        <tbody>
+          {% for c in customers %}
+          <tr>
+            <th scope="row">{{ c.name|safe }}</th>
+            <td>{{ (c.email or "")|safe }}</td>
+            <td>{{ (c.phone or "")|safe }}</td>
+            <td>{{ (c.address or "")|safe }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="empty">No customers yet. Add the first one with the form.</p>
+    {% endif %}
+  </section>
+</main>
+{% endblock %}

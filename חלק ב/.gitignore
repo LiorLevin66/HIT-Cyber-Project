@@ -1,0 +1,4 @@
+.secret_key
+*.db
+outbox.log
+__pycache__/
