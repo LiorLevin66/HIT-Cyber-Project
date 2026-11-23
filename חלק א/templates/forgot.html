@@ -1,0 +1,17 @@
+{% extends "auth_base.html" %}
+{% from "_macros.html" import field %}
+{% block title %}Reset password · Comunication_LTD{% endblock %}
+{% block form %}
+<h1>Reset your password</h1>
+<p class="lede">Enter the email on your account and we'll send a one-time code.</p>
+
+<form method="post" novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  {{ field("email", "Email", type="email", error=error, autocomplete="email", maxlength=120) }}
+  <button class="btn" type="submit">Send reset code</button>
+</form>
+
+<ul class="links">
+  <li><a href="{{ url_for('login') }}">Back to sign in</a></li>
+</ul>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% from "_macros.html" import flashes, strands %}
+{% block body_class %}page-auth{% endblock %}
+{% block body %}
+<div class="auth">
+  <aside class="auth-brand">
+    <a class="wordmark" href="{{ url_for('index') }}">Comunication_LTD</a>
+    {{ strands() }}
+    <p class="brand-note">Customer system for staff</p>
+  </aside>
+  <main class="auth-main">
+    <div class="auth-form">
+      {{ flashes() }}
+      {% block form %}{% endblock %}
+    </div>
+  </main>
+</div>
+{% endblock %}

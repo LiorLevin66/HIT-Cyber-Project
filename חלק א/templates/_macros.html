@@ -1,0 +1,48 @@
+{% macro field(name, label, type="text", value="", error=None, autocomplete=None, hint=None, required=True, maxlength=None, mono=False) %}
+<div class="field{% if error %} has-error{% endif %}">
+  <label for="{{ name }}">{{ label }}{% if not required %} <span class="optional">optional</span>{% endif %}</label>
+  <input id="{{ name }}" name="{{ name }}" type="{{ type }}" value="{{ value }}"
+         {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
+         {% if maxlength %}maxlength="{{ maxlength }}"{% endif %}
+         {% if required %}required{% endif %}
+         {% if mono %}class="mono" spellcheck="false" autocapitalize="off"{% endif %}
+         {% if error %}aria-invalid="true" aria-describedby="{{ name }}-error"{% elif hint %}aria-describedby="{{ name }}-hint"{% endif %}>
+  {% if hint and not error %}<p class="hint" id="{{ name }}-hint">{{ hint }}</p>{% endif %}
+  {% if error %}<p class="field-error" id="{{ name }}-error">{{ error }}</p>{% endif %}
+</div>
+{% endmacro %}
+
+{% macro flashes() %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="flashes" role="status">
+    {% for category, message in messages %}<p class="flash flash-{{ category }}">{{ message }}</p>{% endfor %}
+  </div>
+  {% endif %}
+{% endwith %}
+{% endmacro %}
+
+{# Password rules. Each pip lights up in its cable colour as the rule is met. #}
+{% macro requirements() %}
+<ul class="reqs" id="reqs" data-min="{{ policy.min_length }}" aria-label="Password requirements">
+  <li data-rule="length" style="--pip: var(--c1)">At least {{ policy.min_length }} characters</li>
+  {% if policy.require_upper %}<li data-rule="upper" style="--pip: var(--c2)">An uppercase letter</li>{% endif %}
+  {% if policy.require_lower %}<li data-rule="lower" style="--pip: var(--c3)">A lowercase letter</li>{% endif %}
+  {% if policy.require_digit %}<li data-rule="digit" style="--pip: var(--c4)">A digit</li>{% endif %}
+  {% if policy.require_special %}<li data-rule="special" style="--pip: var(--c5)">A special character</li>{% endif %}
+</ul>
+{% endmacro %}
+
+{# Twelve strands converging into one connector. Drawn once on load. #}
+{% macro strands() %}
+<svg class="strands-art" viewBox="0 0 400 520" preserveAspectRatio="xMaxYMid slice" aria-hidden="true">
+  {% for i in range(12) %}
+  {% set y0 = 36 + i * 38 %}
+  {% set y1 = 208 + i * 9 %}
+  <path pathLength="1" style="stroke: var(--c{{ i + 1 }}); animation-delay: {{ i * 60 }}ms"
+        d="M-10 {{ y0 }} C 140 {{ y0 }}, 190 {{ y1 }}, 318 {{ y1 }} L 372 {{ y1 }}"/>
+  {% endfor %}
+  <rect x="360" y="190" width="46" height="130" rx="5" class="plug"/>
+  <rect x="372" y="202" width="34" height="106" rx="2" class="plug-inner"/>
+</svg>
+{% endmacro %}

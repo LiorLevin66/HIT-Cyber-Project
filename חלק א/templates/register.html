@@ -1,0 +1,26 @@
+{% extends "auth_base.html" %}
+{% from "_macros.html" import field, requirements %}
+{% block title %}Create account · Comunication_LTD{% endblock %}
+{% block form %}
+<h1>Create your account</h1>
+<p class="lede">Use your work email. You'll sign in with your username.</p>
+
+<form method="post" novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  {{ field("username", "Username", value=form.username, error=errors.username, autocomplete="username", maxlength=30) }}
+  {{ field("email", "Email", type="email", value=form.email, error=errors.email, autocomplete="email", maxlength=120) }}
+  <div class="field{% if errors.password %} has-error{% endif %}">
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" autocomplete="new-password" required data-password-input
+           {% if errors.password %}aria-invalid="true" aria-describedby="password-error"{% endif %}>
+    {% if errors.password %}<p class="field-error" id="password-error">{{ errors.password }}</p>{% endif %}
+    {{ requirements() }}
+  </div>
+  {{ field("confirm", "Confirm password", type="password", error=errors.confirm, autocomplete="new-password") }}
+  <button class="btn" type="submit">Create account</button>
+</form>
+
+<ul class="links">
+  <li>Already registered? <a href="{{ url_for('login') }}">Sign in</a></li>
+</ul>
+{% endblock %}
